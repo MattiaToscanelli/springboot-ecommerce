@@ -3,6 +3,7 @@ package ch.toscanelli.ecommerce.service;
 import ch.toscanelli.ecommerce.dao.CustomerRepository;
 import ch.toscanelli.ecommerce.dto.Purchase;
 import ch.toscanelli.ecommerce.dto.PurchaseResponse;
+import ch.toscanelli.ecommerce.entity.Customer;
 import ch.toscanelli.ecommerce.entity.Order;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,23 @@ public class CheckoutService implements ICheckoutService {
         order.setBillingAddress(purchase.getBillingAddress());
         order.setShippingAddress(purchase.getShippingAddress());
 
+        // get customer from dto
+        Customer customer = purchase.getCustomer();
+
+        // check if this is an existing customer
+        String email = customer.getEmail();
+        Customer customerFormDb = customerRepository.findByEmail(email);
+
+        if (customerFormDb != null) {
+            // customer exists
+            customer = customerFormDb;
+        }
+
         // populate customer with order
-        purchase.getCustomer().add(order);
+        customer.add(order);
 
         // save to the database
-        customerRepository.save(purchase.getCustomer());
+        customerRepository.save(customer);
 
         // return a response
         return new PurchaseResponse(orderTrackingNumber);
