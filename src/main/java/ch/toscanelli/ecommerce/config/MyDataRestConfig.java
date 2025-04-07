@@ -1,9 +1,6 @@
 package ch.toscanelli.ecommerce.config;
 
-import ch.toscanelli.ecommerce.entity.Country;
-import ch.toscanelli.ecommerce.entity.Product;
-import ch.toscanelli.ecommerce.entity.ProductCategory;
-import ch.toscanelli.ecommerce.entity.State;
+import ch.toscanelli.ecommerce.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.Type;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(ProductCategory.class, config, theUnsupportedActions);
         disableHttpMethods(Country.class, config, theUnsupportedActions);
         disableHttpMethods(State.class, config, theUnsupportedActions);
+        disableHttpMethods(Order.class, config, theUnsupportedActions);
 
         // expose entity ids
         exposeIds(config);
