@@ -57,3 +57,16 @@ To enable HTTPS locally, create a self-signed certificate using the following st
 
 > ⚠️ This creates a `.p12` keystore that will be automatically picked up by Spring Boot if referenced correctly in `application.properties`.
 
+---
+
+## ⚙️ Update `application.properties`
+
+Before running the application, make sure to update the necessary parameters in the `application.properties` file located in `src/main/resources/application.properties`. 
+
+Here you can update parameters such as:
+
+- **Database connection details** (URL, username, password)
+- **Stripe API keys** (for payment processing)
+- **Okta configurations** (if you plan to use authentication)
+- **Server settings** (e.g., port, SSL configurations)
+
