@@ -3,7 +3,7 @@
 This is the backend REST API for an eCommerce application built with **Spring Boot**.  
 It provides services for product management, order processing, checkout, and integrates with Stripe for payments and Okta for authentication (if enabled from the frontend).
 
-> This backend is meant to be used with the [Angular eCommerce frontend](https://github.com/MattiaToscanelli/angular-ecommerce).
+> This backend is meant to be used with the [angular-ecommerce](https://github.com/MattiaToscanelli/angular-ecommerce).
 
 ---
 
