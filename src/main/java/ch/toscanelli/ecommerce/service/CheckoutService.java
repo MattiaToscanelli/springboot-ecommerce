@@ -1,15 +1,20 @@
 package ch.toscanelli.ecommerce.service;
 
 import ch.toscanelli.ecommerce.dao.CustomerRepository;
+import ch.toscanelli.ecommerce.dto.PaymentInfo;
 import ch.toscanelli.ecommerce.dto.Purchase;
 import ch.toscanelli.ecommerce.dto.PurchaseResponse;
 import ch.toscanelli.ecommerce.entity.Customer;
 import ch.toscanelli.ecommerce.entity.Order;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CheckoutService implements ICheckoutService {
@@ -17,9 +22,18 @@ public class CheckoutService implements ICheckoutService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Value("${stripe.key.secret}")
+    private String secretKey;
+
+    @PostConstruct
+    public void init() {
+        com.stripe.Stripe.apiKey = secretKey;
+    }
+
     @Override
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
+
         // retrieve the order info from dto
         Order order = purchase.getOrder();
 
@@ -54,6 +68,19 @@ public class CheckoutService implements ICheckoutService {
 
         // return a response
         return new PurchaseResponse(orderTrackingNumber);
+    }
+
+    @Override
+    public PaymentIntent createPaymentIntent(PaymentInfo paymentInfo) throws StripeException {
+        List<String> paymentMethodTypes = new ArrayList<>();
+        paymentMethodTypes.add("card");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("amount", paymentInfo.getAmount());
+        params.put("currency", paymentInfo.getCurrency());
+        params.put("payment_method_types", paymentMethodTypes);
+
+        return  PaymentIntent.create(params);
     }
 
     private String generateOrderTrackingNumber() {
