@@ -79,6 +79,7 @@ public class CheckoutService implements ICheckoutService {
         params.put("amount", paymentInfo.getAmount());
         params.put("currency", paymentInfo.getCurrency());
         params.put("payment_method_types", paymentMethodTypes);
+        params.put("description", "ToscanelliEcommerce Purchase");
 
         return  PaymentIntent.create(params);
     }
